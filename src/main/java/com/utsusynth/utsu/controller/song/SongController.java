@@ -33,9 +33,12 @@ import com.utsusynth.utsu.files.song.Ust20Reader;
 import com.utsusynth.utsu.files.song.Ust20Writer;
 import com.utsusynth.utsu.model.song.NoteIterator;
 import com.utsusynth.utsu.model.song.SongContainer;
+import com.utsusynth.utsu.model.voicebank.LyricConfig;
+import com.utsusynth.utsu.model.voicebank.Voicebank;
 import com.utsusynth.utsu.view.song.Piano;
 import com.utsusynth.utsu.view.song.SongCallback;
 import com.utsusynth.utsu.view.song.SongEditor;
+import com.utsusynth.utsu.view.song.note.Note;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
@@ -74,6 +77,8 @@ import java.util.stream.Collectors;
  */
 public class SongController implements EditorController, Localizable {
     private static final ErrorLogger errorLogger = ErrorLogger.getLogger();
+
+
 
     // User session data goes here.
     private EditorCallback callback;
@@ -131,6 +136,12 @@ public class SongController implements EditorController, Localizable {
 
     @FXML // fx:id="quantizeChoiceBox"
     private ChoiceBox<String> quantizeChoiceBox; // Value injected by FXMLLoader
+
+    @FXML // fx:id="noteLyrics"
+    private TextField noteLyrics; // Value injected by FXMLLoader
+
+    @FXML // fx:id="noteTrueLyrics"
+    private TextField noteTrueLyrics; // Value injected by FXMLLoader
 
     @Inject
     public SongController(
@@ -233,6 +244,18 @@ public class SongController implements EditorController, Localizable {
             @Override
             public BooleanProperty getCheckboxValue(CheckboxType checkboxType) {
                 return callback.getCheckboxValue(checkboxType);
+            }
+
+            @Override
+            public void updateLyricTextBoxes(Note note) {
+
+                String lyrics = note.getLyric();
+                noteLyrics.setText(lyrics);
+                Voicebank voicebank = song.get().getVoicebank();
+                Optional<LyricConfig> config=voicebank.getLyricConfig(note.getLyric());
+                if (config.isPresent()) {
+                   noteTrueLyrics.setText(config.get().getTrueLyric());
+                }
             }
         });
         anchorCenter.widthProperty().addListener((obs, oldWidthNum, newWidthNum) -> {
@@ -361,9 +384,17 @@ public class SongController implements EditorController, Localizable {
     @FXML
     private Label quantizationLabel; // Value injected by FXMLLoader
 
+    @FXML
+    private Label noteLyricsLabel; // Value injected by FXMLLoader
+
+    @FXML
+    private Label noteTrueLyricsLabel; // Value injected by FXMLLoader
+
     @Override
     public void localize(ResourceBundle bundle) {
         quantizationLabel.setText(bundle.getString("song.quantization"));
+        noteLyricsLabel.setText(bundle.getString("song.lyrics"));
+        noteTrueLyricsLabel.setText(bundle.getString("song.trueLyrics"));
     }
 
     @Override
