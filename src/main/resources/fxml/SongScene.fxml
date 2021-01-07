@@ -5,16 +5,17 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 
-<BorderPane xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.utsusynth.utsu.controller.song.SongController">
+<BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.utsusynth.utsu.controller.song.SongController">
    <top>
       <AnchorPane BorderPane.alignment="CENTER">
          <children>
-            <HBox layoutX="118.0" spacing="20.0">
+            <HBox layoutX="118.0" spacing="20.0" AnchorPane.topAnchor="0.0">
                <children>
                   <Label fx:id="quantizationLabel" alignment="CENTER" text="Quantization">
                      <HBox.margin>
@@ -23,9 +24,9 @@
                   <ChoiceBox fx:id="quantizeChoiceBox" prefWidth="150.0" />
                   <HBox spacing="10.0">
                      <children>
-                        <AnchorPane fx:id="rewindIcon" prefHeight="27.0" prefWidth="27.0" onMouseClicked="#rewindPlayback" />
-                        <AnchorPane fx:id="playPauseIcon" prefHeight="27.0" prefWidth="27.0" onMouseClicked="#playOrPause" />
-                        <AnchorPane fx:id="stopIcon" prefHeight="27.0" prefWidth="27.0" onMouseClicked="#stopPlayback" />
+                        <AnchorPane fx:id="rewindIcon" onMouseClicked="#rewindPlayback" prefHeight="27.0" prefWidth="27.0" />
+                        <AnchorPane fx:id="playPauseIcon" onMouseClicked="#playOrPause" prefHeight="27.0" prefWidth="27.0" />
+                        <AnchorPane fx:id="stopIcon" onMouseClicked="#stopPlayback" prefHeight="27.0" prefWidth="27.0" />
                      </children>
                   </HBox>
                </children>
@@ -34,6 +35,14 @@
                </padding>
             </HBox>
             <ImageView fx:id="voicebankImage" fitHeight="70.0" fitWidth="70.0" layoutX="25.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" />
+            <HBox layoutX="550.0" layoutY="28.0" prefHeight="34.0" prefWidth="260.0" spacing="10.0">
+               <children>
+                  <Label fx:id="noteLyricsLabel" alignment="CENTER" prefHeight="16.0" prefWidth="60.0" text="Note" textAlignment="CENTER" />
+                  <TextField fx:id="noteLyrics" disable="true" editable="false" prefHeight="26.0" prefWidth="70.0" />
+                  <Label fx:id="noteTrueLyricsLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="16.0" prefWidth="81.0" text="True Note" />
+                  <TextField fx:id="noteTrueLyrics" disable="true" editable="false" prefHeight="26.0" prefWidth="70.0" />
+               </children>
+            </HBox>
          </children>
          <BorderPane.margin>
             <Insets />

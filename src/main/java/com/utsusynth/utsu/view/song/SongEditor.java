@@ -17,7 +17,9 @@ import com.utsusynth.utsu.view.song.note.NoteCallback;
 import com.utsusynth.utsu.view.song.note.NoteFactory;
 import com.utsusynth.utsu.view.song.note.envelope.EnvelopeCallback;
 import com.utsusynth.utsu.view.song.note.pitch.PitchbendCallback;
-import javafx.beans.property.*;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.Group;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
@@ -348,7 +350,7 @@ public class SongEditor {
             return RegionBounds.INVALID; // If no valid song notes to remove, do nothing.
         }
         MutateResponse response = model.removeNotes(positionsToRemove);
-        // Removd all deleted notes from note map.
+        // Remove all deleted notes from note map.
         for (NoteUpdateData updateData : response.getNotes()) {
             // Should never happen but let's check just in case.
             if (noteMap.hasNote(updateData.getPosition())) {
@@ -383,6 +385,7 @@ public class SongEditor {
     }
 
     private void refreshNotes(int firstPosition, int lastPosition) {
+
         MutateResponse standardizeResponse = model.standardizeNotes(firstPosition, lastPosition);
         String prevPitch = "";
         Note prevNote = null;
@@ -478,6 +481,9 @@ public class SongEditor {
         refreshNotes(toStandardize.getMinMs(), toStandardize.getMaxMs());
     }
 
+    /**
+     * Returns the position, on ms, of highlighted note
+     */
     public Optional<Integer> getFocusNote() {
         List<Note> highlightedNotes = playbackManager.getHighlightedNotes();
         if (!highlightedNotes.isEmpty()) {
@@ -487,6 +493,7 @@ public class SongEditor {
     }
 
     public void focusOnNote(int position) {
+
         if (!noteMap.hasNote(position)) {
             return;
         }
@@ -500,6 +507,7 @@ public class SongEditor {
         playbackManager.clearHighlights();
         playbackManager.highlightNote(newFocus);
         playbackManager.realign();
+        model.updateLyricTextBoxes(newFocus);
         if (shouldOpenLyricInput) {
             newFocus.openLyricInput();
         }
@@ -507,7 +515,8 @@ public class SongEditor {
 
     public void openLyricInput(int position) {
         if (noteMap.hasNote(position)) {
-            noteMap.getNote(position).openLyricInput();
+            Note note= noteMap.getNote(position);
+            note.openLyricInput();
         }
     }
 
@@ -746,6 +755,7 @@ public class SongEditor {
     private final NoteCallback noteCallback = new NoteCallback() {
         @Override
         public void highlightExclusive(Note note) {
+            model.updateLyricTextBoxes(note);
             playbackManager.clearHighlights();
             playbackManager.highlightNote(note);
             playbackManager.realign();
@@ -767,7 +777,7 @@ public class SongEditor {
         public boolean isExclusivelyHighlighted(Note note) {
             return playbackManager.isExclusivelyHighlighted(note);
         }
-
+        // this method is called whenever a note is updated
         @Override
         public void updateNote(Note note) {
             int positionMs = note.getAbsPositionMs();
@@ -783,6 +793,7 @@ public class SongEditor {
             } catch (NoteAlreadyExistsException e) {
                 note.setValid(false);
             }
+            model.updateLyricTextBoxes(note);
             // Refreshes notes regardless of whether a new one was placed.
             refreshNotes(positionMs, positionMs);
         }

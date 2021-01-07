@@ -5,6 +5,7 @@ import com.utsusynth.utsu.common.data.MutateResponse;
 import com.utsusynth.utsu.common.data.NoteData;
 import com.utsusynth.utsu.common.data.NoteUpdateData;
 import com.utsusynth.utsu.controller.UtsuController.CheckboxType;
+import com.utsusynth.utsu.view.song.note.Note;
 import javafx.beans.property.BooleanProperty;
 
 import java.util.List;
@@ -58,4 +59,9 @@ public interface SongCallback {
      * Fetches the value of any global checkbox menu item.
      */
     BooleanProperty getCheckboxValue(CheckboxType checkboxType);
+
+    /**
+     * Update the lyrics textbox and real lyrics on main window
+     */
+    void updateLyricTextBoxes(Note note);
 }

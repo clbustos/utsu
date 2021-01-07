@@ -29,7 +29,7 @@ public class Lyric {
         lyricAndAlias.setMouseTransparent(true);
 
         textField = new TextField();
-        textField.setFont(Font.font(9));
+        textField.setFont(Font.font(10));
         textField.setMaxHeight(scaler.scaleY(Quantizer.ROW_HEIGHT).get() - 2);
         textField.setMaxWidth(scaler.scaleX(Quantizer.COL_WIDTH).get() - 2);
         textField.setOnAction((event) -> {

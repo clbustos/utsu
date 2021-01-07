@@ -127,9 +127,24 @@ public class Voicebank {
         return getLyricConfig("", trueLyric, "");
     }
 
+    /**
+     * @param prevLyric previous lyrics as text
+     * @param lyric lyric for current note. If lyric start with '-', removes the previous lyric
+     * @param pitch note pitch
+     * @return a lyric config, an internal representation of the configuration of a single lyric in a voicebank
+     */
     public Optional<LyricConfig> getLyricConfig(String prevLyric, String lyric, String pitch) {
         String prefix = getVowel(prevLyric) + " "; // Most common VCV format.
         String suffix = pitchMap.get(pitch); // Pitch suffix.
+
+        // removes prefix if first character of lyrics is '-'
+
+        if(lyric.length()>0 && lyric.charAt(0) == '-') {
+            prefix="- ";
+            lyric=lyric.substring(1);
+            System.out.println(lyric);
+
+        }
 
         // Check all possible prefix/lyric/suffix combinations.
         for (String combo : allCombinations(prefix, lyric, suffix)) {
