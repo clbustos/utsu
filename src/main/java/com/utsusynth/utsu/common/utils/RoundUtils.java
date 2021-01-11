@@ -3,7 +3,10 @@ package com.utsusynth.utsu.common.utils;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
+<<<<<<< HEAD
 
+=======
+>>>>>>> bug fix: on locale with comma as  decimal separator, all the values on ust are wrong. Added test to fix this
 /** Collection of functions to handle rounding numbers and printing rounded numbers. */
 public class RoundUtils {
     private RoundUtils() {}
